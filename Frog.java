@@ -17,18 +17,17 @@
  * @version 1.0
  */
 package MyPackage;
+import java.util.ArrayList;
 /**
  * Classe représentant un objet Frog
  */
-public class Frog {
-    private String name; // Le nom de la frog
-    private int age; // son age 
-    private double tongueSpeed; // vitesse de la langue
+public class Frog extends Animal {
+	
+	private double tongueSpeed;
     private boolean isFroglet; // booleen sur son etat de froglet
     public static String species; // son espèce
-    private int x; //Position selon X
-    private int y; // Position selon Y
     private int portee;
+    private ArrayList<Fly> fly_array = new ArrayList<>();
 
     // definition des constructeurs 
     /**
@@ -38,7 +37,7 @@ public class Frog {
      * @param tongueSpeed La vitesse de la langue de la grenouille (int).
      */
     public Frog(String name, double ageInYears ,double tongueSpeed){ // Si 3 parametres spécifiées, alors on les assignes aux attributs
-        this(name, (int)(12*ageInYears) , tongueSpeed, 0, 0, 5);
+        this(name, 5, 0, 0, 50, (int)(12*ageInYears) , 10, 10, tongueSpeed);
     }
     
     
@@ -47,7 +46,7 @@ public class Frog {
      * @param name Le nom de la grenouille (String).
      */
     public Frog(String name){
-        this(name, 5, 5, 0, 0, 5); // Si 1 seule parametre spécifié (le nom), alors on assigne par défault 5 en age et en vitesse de langue . On place la Frog en (0,0)
+        this(name, 5, 0, 0, 50, 5, 10, 10, 4); // Si 1 seule parametre spécifié (le nom), alors on assigne par défault 5 en age et en vitesse de langue . On place la Frog en (0,0)
     }
     
     
@@ -57,12 +56,10 @@ public class Frog {
      * @param age L'âge de la grenouille en mois (int).
      * @param tongueSpeed La vitesse de la langue de la grenouille (int).
      */
-    public Frog(String name, int age ,double tongueSpeed, int x, int y, int portee) { // Si 3 parametres spécifiés avec un age en entier, on assigne les paramètres avec une conditions sur la vitesse de la langue
-        this.name = name;
+    public Frog(String name, double speed, int x, int y, int lifespanM, int ageM, int health, int portee, double tongueSpeed) { // Si 3 parametres spécifiés avec un age en entier, on assigne les paramètres avec une conditions sur la vitesse de la langue
+        super(name, speed, x, y, lifespanM, ageM, health);
         this.setPortee(portee);
-        this.setX(x);
-        this.setY(y);
-        this.setAge(age); // Utilisation d'un setters afin de modifier isFroglet lorsque que this.age est modifie
+        this.setAge(ageM); // Utilisation d'un setters afin de modifier isFroglet lorsque que this.age est modifie
         if (this.tongueSpeed < 5){
             this.tongueSpeed = tongueSpeed;
         } else {
@@ -74,24 +71,7 @@ public class Frog {
 
     
     // Getters definiton
-    /**
-     * Obtient le nom de la grenouille.
-     * @return Le nom de la grenouille (String).
-     */
-    public String getName() { 
-        return this.name;
-    }
-    
-    
-    /**
-     * Obtient l'âge de la grenouille en mois.
-     * @return L'âge de la grenouille en mois (int).
-     */
-    public int getAge(){
-        return this.age;
-    }
-    
-    
+
     /**
      * Obtient la vitesse de la langue de la grenouille.
      * @return La vitesse de la langue de la grenouille (double).
@@ -118,36 +98,25 @@ public class Frog {
         return species;
     }
     
-    public int getX() {
-    	return this.x;
-    }
     
-    public int getY() {
-    	return this.y;
-    }
-    
+    /**
+     * Obtient la portée de la grenouille.
+     * @return La portée de la grenouille (String).
+     */
     public int getPortee() {
     	return this.portee;
     }
 
     // Setter definition
     
-    /**
-     * Modifie le nom de la grenouille.
-     * @param newName Le nouveau nom de la grenouille (String).
-     */
-    public void setName(String newName){
-        this.name = newName;
-    } 
-    
     
     /**
-     * Modifie l'âge de la grenouille.
+     * Modifie l'âge de la grenouille, ainsi que l'état de Froglet.
      * @param newAge Le nouvel âge de la grenouille en mois (int).
      */
     public void setAge(int newAge) {
-        this.age = newAge;
-        if (this.age < 7 && this.age > 1) {
+        super.setAge(newAge);
+        if (this.getAge() < 7 && this.getAge() > 1) {
             this.isFroglet = true;
         } else {
             this.isFroglet = false;
@@ -181,37 +150,38 @@ public class Frog {
         species = newSpecie;
     }
     
-    public void setX(int x) {
-    	this.x = x;
-    }
-    
-    public void setY(int y) {
-    	this.y = y;
-    }
-
+    /**
+     * Modifie la portée de la grenouille.
+     * @param portee La nouvelle portée de la grenouille (String).
+     */
     public void setPortee(int portee) {
     	this.portee = portee;
     }
+    
     // Method definition
 
     /**
      * Fait grandir la grenouille en fonction du nombre de mois spécifié.
      * Modifie la vitesse de la langue en fonction de son âge.
+     * Il faut aussi baisser la portée de la Frog au fur et a mesure qu'elle vieillit
      * @param nbMonths Le nombre de mois pour faire vieillir la grenouille (int).
      */
     public void grow(int nbMonths) {
         for (int i=0; i<nbMonths; i++){ // On met à jour les caractéristiques de la frog à pour chaque mois
-
-            if (this.age < 12){ // Si l'age est en dessous de 12 mois alors on incremente de 1 la vitesse de la langue
+        	int age = this.getAge();
+            if (age < 12){ // Si l'age est en dessous de 12 mois alors on incremente de 1 la vitesse de la langue
                 this.tongueSpeed++;
-                this.setAge(++this.age);
+                this.setAge(++age);
 
-            } else if (this.age >=30 && this.tongueSpeed >=5) { // Si elle a moins de 30 mois et que sa vitesse de langue est inférieure à 5, on la décrémente de 1
+            } else if (age >=30 && this.tongueSpeed >=5) { // Si elle a moins de 30 mois et que sa vitesse de langue est inférieure à 5, on la décrémente de 1
                 this.tongueSpeed--;
-                this.setAge(++this.age);
+                this.setAge(age);
 
             } else { // On incrémente juste son age de 1 mois
-                this.setAge(++this.age);
+                this.setAge(++age);
+            }
+            if ((age % 10) == 0) { // On diminue la portée d'une unité tous les 10 ans
+            	this.setPortee(this.getPortee()-1);
             }
         }
     }
@@ -223,32 +193,28 @@ public class Frog {
     public void grow(){
         this.grow(1);
     }
+    
+    
     /**
      * Fait manger une mouche à la grenouille.
      * @param fly La mouche à manger (Fly).
      */
-    
-    
-    public void eat(Fly fly) {
+    public boolean eat(Fly fly) {
         if (!fly.isDead()) {
             // Si la fly est toujours vivante
 
-            if (this.tongueSpeed > fly.getSpeed() && fly.getMass() >= 0.5*this.age){ // Si la fly est attrapée
+            if (this.tongueSpeed > fly.getSpeed() && fly.getMass() >= 0.5*this.getAge()){ // Si la fly est attrapée
                 this.grow(); // On gagne un mois
                 fly.setMass(0); // On tue la mouche
+                return true;
 
             } else { // Si la mouche n'est pas attrapée, elle grossit de 1 unité
                 fly.grow(1);
             }
         }
+        return false;
         // Si la fly est morte alors il ne passe rien 
-    }
-    
-    public void move(int x, int y) {
-    	this.setX(this.getX() + x);
-    	this.setY(this.getY() + y);
-    }
-    
+    }    
     
     /**
      * Renvoie une chaîne de caractères décrivant l'état de la grenouille.
@@ -257,9 +223,9 @@ public class Frog {
     public String toString(){
 
         if (this.isFroglet) {
-            return "My name is " + this.name + " and I am a rare Froglet ! I am " + this.age + " months old and my tongue has a speed of " + this.tongueSpeed + "." + "I am in position (" + this.getX() + ", " + this.getY()+") !";
+            return "My name is " + this.getName() + " and I am a rare Froglet ! I am " + this.getAge() + " months old and my tongue has a speed of " + this.tongueSpeed + "." + "I am in position (" + this.getX() + ", " + this.getY()+") !";
         } else {
-            return "My name is " + this.name + " and I'm a rare frog. I'm "+ this.age +" months old and my tongue has a speed of " + this.tongueSpeed + "."+ "I am in position (" + this.getX() + ", " + this.getY()+") !";
+            return "My name is " + this.getName() + " and I'm a rare frog. I'm "+ this.getAge() +" months old and my tongue has a speed of " + this.tongueSpeed + "."+ "I am in position (" + this.getX() + ", " + this.getY()+") !";
         }
     }
 
