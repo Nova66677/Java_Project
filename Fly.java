@@ -2,25 +2,19 @@ package MyPackage;
 /**
  * Classe représentant un objet mouche
  */
-public class Fly {
+public class Fly extends Animal{
 	
     private double mass;
-    private double speed;
-    private int x; //Position selon X
-    private int y; // Position selon Y
-    
     
     /**
      * Constructeur pour créer une mouche avec une masse et une vitesse spécifiées.
      * @param mass La masse de la mouche (double).
      * @param speed La vitesse de la mouche (double).
      */
-    public Fly(double mass, double speed, int x, int y) {
+    public Fly(String name, double speed, int x, int y, int lifespan, int age, int health, double mass) {
         // Si mass et speed sont precises, on assigne les valeurs aux attributs de Fly
+    	super(name, speed, x, y , lifespan, age, health);
         this.mass = mass;
-        this.speed = speed;
-        this.setX(x);
-        this.setY(y);
     }
     
     
@@ -30,12 +24,12 @@ public class Fly {
      */
     public Fly(double mass) {
         // Si seule la masse est précisée alors on assigne 10 par default à speed
-        this(mass, 10, 0, 0);
+        this("Cyril", 4, 0, 0, 15, 5, 1, mass);
     }
     
     public Fly(double mass, double speed) {
-    	this.mass = mass;
-        this.speed = speed;
+    	// Si les coordonnées ne sont pas renseignées alors on les assigne à (0,0)
+    	this("Cyril", speed, 0, 0, 15, 5, 1, mass);
     }
     
     /**
@@ -43,7 +37,7 @@ public class Fly {
      */
     public Fly(){
         // Si rien n'est précisé, on assigne 5 à la masse et 10 à speed
-        this(5, 10, 0, 0);
+        this("Cyril", 4, 0, 0, 15, 5, 1, 1);
     }
 
     // Getters definiton
@@ -61,27 +55,15 @@ public class Fly {
      * Obtient la vitesse de la mouche.
      * @return La vitesse de la mouche (double).
      */
-    public double getSpeed(){
-        return this.speed;
-    }
-    
-    public int getX() {
-    	return this.x;
-    }
-    
-    public int getY() {
-    	return this.y;
-    }
 
+   
     
     // Setters definiton
     /**
      * Modifie la vitesse de la mouche.
      * @param newSpeed La nouvelle vitesse de la mouche (double).
      */
-    public void setSpeed(double newSpeed){
-        this.speed = newSpeed;
-    }
+
     
     
     /**
@@ -91,14 +73,7 @@ public class Fly {
     public void setMass(double newMass) {
         this.mass = newMass;
     }
-    
-    public void setX(int x) {
-    	this.x = x;
-    }
-    
-    public void setY(int y) {
-    	this.y = y;
-    }
+
 
 
     // Method definition
@@ -111,9 +86,9 @@ public class Fly {
         // On affiche l'etat de la Fly selon la valeur de sa masse
 
         if (this.mass == 0){
-            return "I am dead but I used to be a fly with a speed of " + Double.toString(this.speed)+". I am at position (" + this.getX() + ", " + this.getY()+").";
+            return "I am dead but I used to be a fly with a speed of " + Double.toString(this.getSpeed())+". I am at position (" + this.getX() + ", " + this.getY()+").";
         } else {
-            return "I am a speedy fly with "+Double.toString(this.speed) + " speed and " + Double.toString(this.mass)+ " mass"+". I am at position (" + this.getX() + ", " + this.getY()+").";
+            return "I am a speedy fly with "+Double.toString(this.getSpeed()) + " speed and " + Double.toString(this.mass)+ " mass"+". I am at position (" + this.getX() + ", " + this.getY()+").";
         }
     }
     
@@ -128,15 +103,15 @@ public class Fly {
 
         for (int i=0; i<addMass; i++){
             this.mass++;
+            double speed = this.getSpeed();
             if (this.mass<20){
-                this.speed++;
+            	this.setSpeed(++speed);
             } else {
-                this.speed = this.speed - 0.5;
+                this.setSpeed(speed - 0.5);
             }
         }
     }
-    
-    
+ 
     /**
      * Vérifie si la mouche est morte.
      * @return true si la mouche est morte, sinon false (boolean).
