@@ -11,9 +11,9 @@ public class Fly extends Animal{
      * @param mass La masse de la mouche (double).
      * @param speed La vitesse de la mouche (double).
      */
-    public Fly(String name, double speed, int x, int y, int lifespan, int age, int health, double mass) {
+    public Fly(String name, double speed, int x, int y, int lifespan, int age, double mass) {
         // Si mass et speed sont precises, on assigne les valeurs aux attributs de Fly
-    	super(name, speed, x, y , lifespan, age, health);
+    	super(name, speed, x, y , lifespan, age);
         this.mass = mass;
     }
     
@@ -24,12 +24,12 @@ public class Fly extends Animal{
      */
     public Fly(double mass) {
         // Si seule la masse est précisée alors on assigne 10 par default à speed
-        this("Cyril", 4, 0, 0, 15, 5, 1, mass);
+        this("Cyril", 4, 0, 0, 15, 5, mass);
     }
     
     public Fly(double mass, double speed) {
     	// Si les coordonnées ne sont pas renseignées alors on les assigne à (0,0)
-    	this("Cyril", speed, 0, 0, 15, 5, 1, mass);
+    	this("Cyril", speed, 0, 0, 15, 5, mass);
     }
     
     /**
@@ -37,7 +37,7 @@ public class Fly extends Animal{
      */
     public Fly(){
         // Si rien n'est précisé, on assigne 5 à la masse et 10 à speed
-        this("Cyril", 4, 0, 0, 15, 5, 1, 1);
+        this("Cyril", 4, 0, 0, 15, 5, 1);
     }
 
     // Getters definiton
