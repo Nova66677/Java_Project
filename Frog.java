@@ -17,7 +17,6 @@
  * @version 1.0
  */
 package MyPackage;
-import java.util.ArrayList;
 /**
  * Classe représentant un objet Frog
  */
@@ -27,7 +26,6 @@ public class Frog extends Animal {
     private boolean isFroglet; // booleen sur son etat de froglet
     public static String species; // son espèce
     private int portee;
-    private ArrayList<Fly> fly_array = new ArrayList<>();
 
     // definition des constructeurs 
     /**
@@ -37,7 +35,7 @@ public class Frog extends Animal {
      * @param tongueSpeed La vitesse de la langue de la grenouille (int).
      */
     public Frog(String name, double ageInYears ,double tongueSpeed){ // Si 3 parametres spécifiées, alors on les assignes aux attributs
-        this(name, 5, 0, 0, 50, (int)(12*ageInYears) , 10, 10, tongueSpeed);
+        this(name, 5, 0, 0, 50, (int)(12*ageInYears) , 10, tongueSpeed);
     }
     
     
@@ -46,7 +44,7 @@ public class Frog extends Animal {
      * @param name Le nom de la grenouille (String).
      */
     public Frog(String name){
-        this(name, 5, 0, 0, 50, 5, 10, 10, 4); // Si 1 seule parametre spécifié (le nom), alors on assigne par défault 5 en age et en vitesse de langue . On place la Frog en (0,0)
+        this(name, 5, 0, 0, 50, 5, 10, 4); // Si 1 seule parametre spécifié (le nom), alors on assigne par défault 5 en age et en vitesse de langue . On place la Frog en (0,0)
     }
     
     
@@ -56,8 +54,8 @@ public class Frog extends Animal {
      * @param age L'âge de la grenouille en mois (int).
      * @param tongueSpeed La vitesse de la langue de la grenouille (int).
      */
-    public Frog(String name, double speed, int x, int y, int lifespanM, int ageM, int health, int portee, double tongueSpeed) { // Si 3 parametres spécifiés avec un age en entier, on assigne les paramètres avec une conditions sur la vitesse de la langue
-        super(name, speed, x, y, lifespanM, ageM, health);
+    public Frog(String name, double speed, int x, int y, int lifespanM, int ageM, int portee, double tongueSpeed) { // Si 3 parametres spécifiés avec un age en entier, on assigne les paramètres avec une conditions sur la vitesse de la langue
+        super(name, speed, x, y, lifespanM, ageM);
         this.setPortee(portee);
         this.setAge(ageM); // Utilisation d'un setters afin de modifier isFroglet lorsque que this.age est modifie
         if (this.tongueSpeed < 5){
