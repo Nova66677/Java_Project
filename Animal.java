@@ -8,10 +8,10 @@ abstract public class Animal {
 	private int x;
 	private int y;
 	private int lifespan;
-	private int health;
 	private boolean dead;
 	
-	public Animal(String name, double speed, int x, int y, int lifespan, int age, int health ) {
+	public Animal(String name, double speed, int x, int y, int lifespan, int age ) {
+		
 		this.name = name;
 		this.speed = speed;
 		this.x = x;
@@ -19,7 +19,6 @@ abstract public class Animal {
 		this.lifespan = lifespan;
 		this.age = age;
 		this.dead = false;
-		this.health = health;
 	}
 	
     /**
@@ -70,12 +69,12 @@ abstract public class Animal {
 	}
 	
 	public boolean isDead() {
-		if (this.lifespan < this.age || this.health <= 0) {
+		if (this.lifespan < this.age) {
 			this.dead = true;
 		}
 		return this.dead;
 	}
 	
-	public String toString(); // Méthode abstraite
+	abstract public String toString(); // Méthode abstraite
 	
 }
