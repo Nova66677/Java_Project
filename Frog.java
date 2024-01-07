@@ -17,14 +17,16 @@
  * @version 1.0
  */
 package MyPackage;
+
+
 /**
  * Classe représentant un objet Frog
  */
 public class Frog extends Animal {
 	
 	private double tongueSpeed;
-    private boolean isFroglet; // booleen sur son etat de froglet
-    public static String species; // son espèce
+    private boolean isFroglet;     // Booléen sur son état de froglet
+    public static String species; // Son espèce
     private int portee;
 
     // definition des constructeurs 
@@ -34,6 +36,8 @@ public class Frog extends Animal {
      * @param ageInYears L'âge de la grenouille en années (double).
      * @param tongueSpeed La vitesse de la langue de la grenouille (int).
      */
+    
+
     public Frog(String name, double ageInYears ,double tongueSpeed){ // Si 3 parametres spécifiées, alors on les assignes aux attributs
         this(name, 5, 0, 0, 50, (int)(12*ageInYears) , 10, tongueSpeed);
     }
@@ -178,7 +182,7 @@ public class Frog extends Animal {
             } else { // On incrémente juste son age de 1 mois
                 this.setAge(++age);
             }
-            if ((age % 10) == 0) { // On diminue la portée d'une unité tous les 10 ans
+            if ((age % 10) == 0) {  // On diminue la portée d'une unité tous les 10 ans
             	this.setPortee(this.getPortee()-1);
             }
         }
