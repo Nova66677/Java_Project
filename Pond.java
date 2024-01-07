@@ -25,6 +25,16 @@ public class Pond {
 	 * 
 	 */
 	
+	
+	
+    /**
+     * Crée une grenouille avec des caractéristiques aléatoires.
+     * 
+     * @param nbFrog    Le numéro de la grenouille (int).
+     * @param limite_x  La limite en x pour la position aléatoire (int).
+     * @param limite_y  La limite en y pour la position aléatoire (int).
+     * @return La grenouille créée avec des caractéristiques aléatoires (Frog).
+     */
 	public static Frog createFrog(int nbFrog, int limite_x, int limite_y) {
 		int speed = 3;
     	int limInfPortee = 1;
@@ -44,6 +54,15 @@ public class Pond {
 		return frog;
 	}
 	
+	
+    /**
+     * Génère une liste de grenouilles avec des caractéristiques aléatoires.
+     * 
+     * @param nbFrog    Le nombre de grenouilles à générer (int).
+     * @param limite_x  La limite en x pour la position aléatoire (int).
+     * @param limite_y  La limite en y pour la position aléatoire (int).
+     * @return La liste des grenouilles générées (ArrayList<Frog>).
+     */
 	public static ArrayList<Frog> generateFrog(int nbFrog, int limite_x, int limite_y) {
 		ArrayList<Frog> array_frog = new ArrayList<>();
 		for (int i=0; i<nbFrog; i++) {
@@ -53,6 +72,14 @@ public class Pond {
 	}
 	
 	
+    /**
+     * Crée une mouche avec des caractéristiques aléatoires.
+     * 
+     * @param nbFly     Le numéro de la mouche (int).
+     * @param limite_x  La limite en x pour la position aléatoire (int).
+     * @param limite_y  La limite en y pour la position aléatoire (int).
+     * @return La mouche créée avec des caractéristiques aléatoires (Fly).
+     */
 	public static Fly createFly(int nbFly, int limite_x, int limite_y) {
 		
 		int speed = 2; // Une mouche est moins rapide qu'une grenouille 
@@ -69,6 +96,14 @@ public class Pond {
 	}
 	
 	
+    /**
+     * Génère une liste de mouches avec des caractéristiques aléatoires.
+     * 
+     * @param nbFly     Le nombre de mouches à générer (int).
+     * @param limite_x  La limite en x pour la position aléatoire (int).
+     * @param limite_y  La limite en y pour la position aléatoire (int).
+     * @return La liste des mouches générées (ArrayList<Fly>).
+     */
 	public static ArrayList<Fly> generateFly(int nbFly, int limite_x, int limite_y) {
 		ArrayList<Fly> array_fly = new ArrayList<>();
 		for (int i=0; i<nbFly; i++) {
@@ -78,6 +113,13 @@ public class Pond {
 	}
 	
 	
+    /**
+     * Calcule la distance entre une grenouille et une mouche.
+     * 
+     * @param frog La grenouille (Frog).
+     * @param fly  La mouche (Fly).
+     * @return La distance entre la grenouille et la mouche (double).
+     */
 	public static double distance(Frog frog, Fly fly) {
 		int xFly = fly.getX();
 		int yFly = fly.getY();
@@ -88,6 +130,14 @@ public class Pond {
 		return d;
 	}
 	
+	
+    /**
+     * Déplace toutes les grenouilles et toutes les mouches pour un certain nombre de tours.
+     * 
+     * @param nbTour      Le nombre de tours de déplacement (int).
+     * @param Frog_array  La liste des grenouilles (ArrayList<Frog>).
+     * @param Fly_array   La liste des mouches (ArrayList<Fly>).
+     */
 	public static void move_all(int nbTour, ArrayList<Frog> Frog_array, ArrayList<Fly> Fly_array) {
 		int dx, dy;
 		int min = -1;
