@@ -25,6 +25,58 @@ public class Pond {
 	 * 
 	 */
 	
+	public static Frog createFrog(int nbFrog, int limite_x, int limite_y) {
+		int speed = 3;
+    	int limInfPortee = 1;
+    	int limSupPortee = 5;
+    	int limInfAge = 1;
+    	int limSupAge = 5;
+    	int limInfTS = 2;
+    	int limSupTS = 5;
+    	int Lifespan = 12; // En réalité, c'est en moyenne 12 semaines mais on va dire 12 mois sinon la simulation sera trop court
+    	int x = ThreadLocalRandom.current().nextInt(-limite_x, limite_x + 1);
+		int y = ThreadLocalRandom.current().nextInt(-limite_y, limite_y + 1);
+		int age = ThreadLocalRandom.current().nextInt(limInfAge, limSupAge + 1);
+		int portee = ThreadLocalRandom.current().nextInt(limInfPortee, limSupPortee + 1);
+		int tongueSpeed = ThreadLocalRandom.current().nextInt(limInfTS, limSupTS + 1);
+		Frog frog = new Frog(Integer.toString(nbFrog), speed, x, y, Lifespan, age, portee, tongueSpeed);
+		
+		return frog;
+	}
+	
+	public static ArrayList<Frog> generateFrog(int nbFrog, int limite_x, int limite_y) {
+		ArrayList<Frog> array_frog = new ArrayList<>();
+		for (int i=0; i<nbFrog; i++) {
+			array_frog.add(createFrog(i, limite_x, limite_y));
+		}
+		return array_frog;
+	}
+	
+	
+	public static Fly createFly(int nbFly, int limite_x, int limite_y) {
+		
+		int speed = 2; // Une mouche est moins rapide qu'une grenouille 
+    	int limInfAge = 1;
+    	int limSupAge = 5;
+    	int Lifespan = 10; // En réalité, c'est en moyenne 12 semaines mais on va dire 12 mois sinon la simulation sera trop court
+    	int x = ThreadLocalRandom.current().nextInt(-limite_x, limite_x + 1);
+		int y = ThreadLocalRandom.current().nextInt(-limite_y, limite_y + 1);
+		int age = ThreadLocalRandom.current().nextInt(limInfAge, limSupAge + 1);
+		int mass = 1;
+		Fly fly = new Fly(Integer.toString(nbFly), speed, x, y, Lifespan, age, mass);
+		
+		return fly;
+	}
+	
+	
+	public static ArrayList<Fly> generateFly(int nbFly, int limite_x, int limite_y) {
+		ArrayList<Fly> array_fly = new ArrayList<>();
+		for (int i=0; i<nbFly; i++) {
+			array_fly.add(createFly(i, limite_x, limite_y));
+		}
+		return array_fly;
+	}
+	
 	
 	public static double distance(Frog frog, Fly fly) {
 		int xFly = fly.getX();
@@ -68,37 +120,16 @@ public class Pond {
 	public static void main(String[] args) {
 		
 		// On créé nos Grenouilles ainsi que nos mouches
-		
-        Frog peepo = new Frog("Peepo");
-        Frog pepe = new Frog("Pepe", 10, 20);
-        Frog peepaw = new Frog("Peepaw", 4.6, 20);
-        Frog pierre = new Frog("Pierre", 5, 20);
-        
-        Fly fly1 = new Fly(1, 3);
-        Fly fly2 = new Fly(6);
-        Fly fly3 = new Fly(10, 5);
-        Fly fly4 = new Fly(10, 5);
-        Fly fly5 = new Fly(10, 5);
-        Fly fly6 = new Fly(10, 5);
-        Fly fly7 = new Fly(10, 5);
+	
         
         // On définit deux arrays dynamiques afin de stocker nos mouches et nos grenouilles
         
         ArrayList<Frog> Frog_array = new ArrayList<>();
         ArrayList<Fly> Fly_array = new ArrayList<>();
         
-        Frog_array.add(pierre);
-        Frog_array.add(peepaw);
-        Frog_array.add(pepe);
-        Frog_array.add(peepo);
+        Fly_array = Pond.generateFly(10, taille_y, taille_x);
+        Frog_array = Pond.generateFrog(10, taille_y, taille_x);
         
-        Fly_array.add(fly1);
-        Fly_array.add(fly2);
-        Fly_array.add(fly3);
-        Fly_array.add(fly4);
-        Fly_array.add(fly5);
-        Fly_array.add(fly6);
-        Fly_array.add(fly7);
         
         Frog.species = "1331 Frogs";
         
@@ -134,5 +165,6 @@ public class Pond {
         		}
         	}
         	tour++;
-        }	
-}	
+        }
+	}
+}
