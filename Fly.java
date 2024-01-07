@@ -32,6 +32,7 @@ public class Fly extends Animal{
     	this("Cyril", speed, 0, 0, 15, 5, mass);
     }
     
+    
     /**
      * Constructeur pour créer une mouche avec des valeurs par défaut pour la masse et la vitesse.
      */
@@ -52,28 +53,12 @@ public class Fly extends Animal{
     
     
     /**
-     * Obtient la vitesse de la mouche.
-     * @return La vitesse de la mouche (double).
-     */
-
-   
-    
-    // Setters definiton
-    /**
-     * Modifie la vitesse de la mouche.
-     * @param newSpeed La nouvelle vitesse de la mouche (double).
-     */
-
-    
-    
-    /**
      * Modifie la masse de la mouche.
      * @param newMass La nouvelle masse de la mouche (double).
      */
     public void setMass(double newMass) {
         this.mass = newMass;
     }
-
 
 
     // Method definition
@@ -111,6 +96,7 @@ public class Fly extends Animal{
             }
         }
     }
+    
  
     /**
      * Vérifie si la mouche est morte.
