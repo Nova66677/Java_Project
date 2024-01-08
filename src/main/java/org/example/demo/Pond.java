@@ -159,8 +159,8 @@ public class Pond {
 		for (int i=0; i<10000; i++) {
 	    	for (int j=0; j<Frog_array.size(); j++) {
 	    		Frog frog = Frog_array.get(j);
-	    		dx = ThreadLocalRandom.current().nextInt(min, max + 1);
-	    		dy = ThreadLocalRandom.current().nextInt(min, max + 1);
+	    		dx = ThreadLocalRandom.current().nextInt(min, max + 1) * 10;
+	    		dy = ThreadLocalRandom.current().nextInt(min, max + 1) * 10;
 	    		
 	    		frog.move(dx, dy);
 	    	}

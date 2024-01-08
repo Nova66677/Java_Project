@@ -226,7 +226,7 @@ public class graphics extends Application {
 
     private void handleFrogClick(MouseEvent event) {
         ImageView clickedFrog = (ImageView) event.getSource();
-        move(clickedAnimal);
+        move(clickedFrog);
     }
 
     private void move(ImageView animal) {
