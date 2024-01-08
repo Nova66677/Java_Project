@@ -62,6 +62,9 @@ abstract public class Animal {
      */
 	public void setAge(int age) {
 		this.age = age;
+		if (this.getAge() == this.lifespan) {
+			this.dead = true;
+		}
 	}
 	
 	
@@ -143,10 +146,15 @@ abstract public class Animal {
      * @param nbY Le déplacement en y (int).
      */
 	public void move(int nbX, int nbY) {
-		this.setX(this.getX() + nbX);
-		this.setY(this.getY() + nbY);
+		if (!this.isDead()) { 
+			this.setX(this.getX() + nbX);
+			this.setY(this.getY() + nbY);
+		}
 	}
 	
+	public void gettingOlder() {
+		this.setAge(this.getAge()+1);
+	}
 	
     /**
      * Vérifie si l'animal est mort en comparant son âge à sa durée de vie.
@@ -154,11 +162,15 @@ abstract public class Animal {
      * @return true si l'animal est mort, sinon false (boolean).
      */
 	public boolean isDead() {
-		if (this.lifespan < this.age) {
+		if (this.lifespan <= this.age) {
 			this.dead = true;
 		}
 		return this.dead;
 	}
+	
+	public String getPosition() {
+		return "("+ Integer.toString(this.getX()) + ", " + Integer.toString(this.getY());
+ 	}
 	
 	
     /**
