@@ -127,7 +127,7 @@ public class Pond {
 		int xFrog = frog.getX();
 		int yFrog = frog.getY();
 		
-		double d = Math.sqrt((xFly - xFrog)^2 + (yFrog - yFly)^2);
+		double d = Math.sqrt(Math.pow(xFly - xFrog, 2) + Math.pow(yFrog - yFly, 2));
 		return d;
 	}
 	
@@ -203,7 +203,7 @@ public class Pond {
         
         System.out.println("Enter 'start' to start the simulation");
         String test = myInput.nextLine();
-        while (test != "start") {
+        while (!test.equals("start")){
         	System.out.println("Enter 'start' to start the simulation");
             test = myInput.nextLine();
             System.out.println(test);
@@ -233,5 +233,5 @@ public class Pond {
         	}
         	tour++;
         }
-	}
+	
 }
