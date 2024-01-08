@@ -10,8 +10,8 @@ import java.util.ArrayList;
 public class Pond {
 	
 	// On définit la taille de notre étang
-	private static int taille_x = 505;
-	private static int taille_y = 550;
+	private static int taille_x = 10;
+	private static int taille_y = 10;
 
 	
 	
@@ -140,16 +140,21 @@ public class Pond {
      * @param Fly_array   La liste des mouches (ArrayList<Fly>).
      */
 	public static void move_all(int nbTour, ArrayList<Frog> Frog_array, ArrayList<Fly> Fly_array) {
-		int dx, dy;
-		int min = -1;
+		int dx, dy;     // Déplacement des Frogs lors de ce tour
+		int min = -1;  // Ces deux variables servent pour le deplacement des mouches
 		int max = 1;
 		for (int i=0; i<10000; i++) {
 	    	for (int j=0; j<Frog_array.size(); j++) {
 	    		Frog frog = Frog_array.get(j);
-	    		dx = ThreadLocalRandom.current().nextInt(min, max + 1);
-	    		dy = ThreadLocalRandom.current().nextInt(min, max + 1);
-	    		
-	    		frog.move(dx, dy);
+	    		dx = ThreadLocalRandom.current().nextInt(-(int)frog.getSpeed(), (int)frog.getSpeed() + 1);
+	    		dy = ThreadLocalRandom.current().nextInt(-(int)frog.getSpeed(), (int)frog.getSpeed() + 1);
+	    		int frog_x = frog.getX();
+	    		int frog_y = frog.getY();
+	    		int new_coordX = frog_x + dx;
+	    		int new_coordY = frog_y + dy;
+	    		if ((new_coordX >= -taille_x && new_coordX <= taille_x) && (new_coordY >= -taille_y && new_coordY <= taille_y )) {
+	    			frog.move(dx, dy);
+	    		}
 	    	}
 	    	
 	    	// Et maintenant, on déplace les mouches
@@ -161,7 +166,7 @@ public class Pond {
 	    		int fly_y = fly.getY();
 	    		int new_coordX = fly_x + dx;
 	    		int new_coordY = fly_y + dy;
-	    		if ((new_coordX > -taille_x || new_coordX < taille_x) && (new_coordY > -taille_y || new_coordY < taille_y )) {
+	    		if ((new_coordX >= -taille_x && new_coordX <= taille_x) && (new_coordY >= -taille_y && new_coordY <= taille_y )) {
 	    			fly.move(dx, dy);
 	    		}
 	    	}
@@ -178,15 +183,28 @@ public class Pond {
         ArrayList<Frog> Frog_array = new ArrayList<>();
         ArrayList<Fly> Fly_array = new ArrayList<>();
         
-        // Initialisation 
+        // On créé deux autres tableaux pour y stocker des les mouches et les grenouilles mortes 
+        ArrayList<Frog> Dead_Frog_array = new ArrayList<>();
+        ArrayList<Fly> Dead_Fly_array = new ArrayList<>();
         
-        System.out.println("<---- Bienvenue dans l'étang !---->");
-        System.out.println("Please enter the desired number of frogs : ");
+        
+        int nb_frog = 0;
+        int nb_fly = 0;
         Scanner myInput = new Scanner(System.in);  // On créé notre input
-        int nb_frog = Integer.valueOf(myInput.nextLine());
-        System.out.println("Please enter the desired number of fly : ");
-        int nb_fly = Integer.valueOf(myInput.nextLine());
-        
+        // Initialisation 
+        while (nb_frog == 0 && nb_fly == 0) {
+	        try {
+		        System.out.println("<---- Bienvenue dans l'étang !---->");
+		        System.out.println("Please enter the desired number of frogs : ");
+		        
+		        
+		        nb_frog = Integer.valueOf(myInput.nextLine());
+		        System.out.println("Please enter the desired number of fly : ");
+		        nb_fly = Integer.valueOf(myInput.nextLine());
+	        } catch (NumberFormatException e) {
+	        	System.out.println("Vous devez entrer un entier !");
+	        }
+        }
         Fly_array = Pond.generateFly(nb_fly, taille_y, taille_x);
         Frog_array = Pond.generateFrog(nb_frog, taille_y, taille_x);
         
@@ -208,6 +226,7 @@ public class Pond {
             test = myInput.nextLine();
             System.out.println(test);
         }
+        myInput.close(); // On ferme notre Scanner que l'on n'utilisera plus
         System.out.println("<--- Starting simulation--->");
         
         while (tour < 30) {
@@ -219,6 +238,7 @@ public class Pond {
         	
         	for (int i=0; i<Frog_array.size(); i++) {
         		Frog frog = Frog_array.get(i);
+        		// System.out.println("Je suis Frog " + i + ", position " + frog.getPosition());
         		for (int j=0; j<Fly_array.size(); j++) {
         			Fly fly = Fly_array.get(j);
         			d = Pond.distance(frog, fly);
@@ -231,7 +251,37 @@ public class Pond {
         			}
         		}
         	}
-        	tour++;
+        	
+        	// On vieillis nos Animaux avec leur méthode gettingOlder()
+            for (int i=0; i<Frog_array.size(); i++) {
+            	Frog frog = Frog_array.get(i);
+            	frog.gettingOlder();
+            	if (frog.isDead() && !Dead_Frog_array.contains(frog) ) {
+            		Dead_Frog_array.add(frog);
+            		System.out.println("Moi, " + frog.getName() + ", je viens de m'éteindre.");
+            	}
+            }
+            for (int i=0; i<Fly_array.size(); i++) {
+            	Fly fly = Fly_array.get(i);
+            	fly.gettingOlder();
+            	if (fly.isDead() && !Dead_Fly_array.contains(fly) ) {
+            		Dead_Fly_array.add(fly);
+            		System.out.println("Moi, " + fly.getName() + ", je viens de m'éteindre.");
+            	}
+            }
+            
+        	tour++; // On n'oublie pas d'incrémenter notre tour
         }
-	
+        
+        // A la fin de la simulation, on affiche l'état de nos Animaux
+        
+        for (int i=0; i<Frog_array.size(); i++) {
+        	Frog frog = Frog_array.get(i);
+        	System.out.println(frog.toString());
+        }
+        for (int i=0; i<Fly_array.size(); i++) {
+        	Fly fly = Fly_array.get(i);
+        	System.out.println(fly.toString());
+        }
+	}
 }
