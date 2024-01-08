@@ -5,13 +5,14 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
+
+import java.util.ArrayList;
 
 public class graphics extends Application {
 
@@ -23,12 +24,13 @@ public class graphics extends Application {
     private Label subLabel;
     private Label creditLabel;
     private Stage primaryStage;
+    private VBox centerBox;
 
     // Attributs du jeu
     private static final double[] xCoordinates = {50, 150, 250, 100, 200};
     private static final double[] yCoordinates = {50, 100, 150, 200, 250};
 
-    private Pond etang = new Pond();
+    private Pond etang = new Pond(5, 5);
 
     public static void main(String[] args) {
         launch(args);
@@ -54,8 +56,8 @@ public class graphics extends Application {
         root.setBackground(new Background(background));
 
         // Conteneur VBox pour les boutons au centre
-        VBox centerBox = new VBox(20);
-        centerBox.setAlignment(Pos.CENTER);
+        this.centerBox = new VBox(20);
+        this.centerBox.setAlignment(Pos.CENTER);
 
         // Conteneur VBox pour les titres
         VBox titleBox = new VBox(10);
@@ -133,6 +135,7 @@ public class graphics extends Application {
         this.creditLabel.setVisible(false);
         this.exitButton.setManaged(false);
         this.exitButton.setVisible(false);
+
         run();
     }
 
@@ -164,16 +167,40 @@ public class graphics extends Application {
     }
 
     private void run(){
-        Pane game = new Pane();
+        // Charger l'image d'arrière-plan
+        Image backgroundImage = new Image(getClass().getResourceAsStream("/gameBackground.jpg"));
 
-        // Créer des cercles et les positionner
-        for (int i = 0; i < xCoordinates.length && i < yCoordinates.length; i++) {
-            Circle circle = createCircle(xCoordinates[i], yCoordinates[i]);
+        // Créer une image de fond avec l'image chargée
+        BackgroundImage background = new BackgroundImage(backgroundImage,
+                BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT,
+                BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+
+        // Appliquer l'image de fond au conteneur BorderPane
+        BorderPane game = new BorderPane();
+        game.setBackground(new Background(background));
+
+        // Créer les mouches et les grenouilles
+        ArrayList<Frog> Frog_array = new ArrayList<>();
+        ArrayList<Fly> Fly_array = new ArrayList<>();
+
+        Fly_array = Pond.generateFly(15, etang.taille_x, etang.taille_y);
+        Frog_array = Pond.generateFrog(15, 500, 300);
+
+        // affichage et "clickabilité" des grenouilles
+        for (Frog f : Frog_array) {
+            ImageView frog = createFrog(f.getX(), f.getY());
 
             // Ajouter un gestionnaire d'événements au cercle
-            circle.setOnMouseClicked(this::handleCircleClick);
+            frog.setOnMouseClicked(this::handleFrogClick);
 
-            game.getChildren().add(circle); // Ajouter le cercle au panneau
+            game.getChildren().add(frog); // Ajouter le cercle au panneau
+        }
+
+        // affichage et "clickabilité" des grenouilles
+        for (Fly f : Fly_array) {
+            ImageView fly = createFly(f.getX(), f.getY());
+
+            game.getChildren().add(fly); // Ajouter le cercle au panneau
         }
 
         Scene scene = new Scene(game, 1000, 667);
@@ -181,25 +208,33 @@ public class graphics extends Application {
         primaryStage.show();
     }
 
-    private Circle createCircle(double x, double y) {
-        Circle circle = new Circle(20);
-        circle.setFill(Color.BLUE);
-        circle.setCenterX(x);
-        circle.setCenterY(y);
-        return circle;
+    private ImageView createFrog(double x, double y) {
+        Image frog = new Image(getClass().getResourceAsStream("/frog.jpg"));
+        ImageView imageView = new ImageView(frog);
+        imageView.setX(x);
+        imageView.setY(y);
+        return imageView;
     }
 
-    private void handleCircleClick(MouseEvent event) {
-        Circle clickedCircle = (Circle) event.getSource();
-        move(clickedCircle);
+    private ImageView createFly(double x, double y) {
+        Image fly = new Image(getClass().getResourceAsStream("/fly.jpg"));
+        ImageView imageView = new ImageView(fly);
+        imageView.setX(x);
+        imageView.setY(y);
+        return imageView;
     }
 
-    private void move(Circle circle) {
+    private void handleFrogClick(MouseEvent event) {
+        ImageView clickedFrog = (ImageView) event.getSource();
+        move(clickedAnimal);
+    }
+
+    private void move(ImageView animal) {
         // Implémentez votre logique de déplacement ici
         // Par exemple, vous pouvez changer les coordonnées du cercle
-        double newX = circle.getCenterX() + 10;
-        double newY = circle.getCenterY() + 10;
-        circle.setCenterX(newX);
-        circle.setCenterY(newY);
+        double newX = animal.getX() + 10;
+        double newY = animal.getY() + 10;
+        animal.setX(newX);
+        animal.setY(newY);
     }
 }

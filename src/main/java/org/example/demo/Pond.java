@@ -7,12 +7,25 @@ import java.util.ArrayList;
  * Classe représentant un étang où des grenouilles et des mouches interagissent.
  */
 public class Pond {
-	
-	// On définit la taille de notre étang
-	private static int taille_x = 505;
-	private static int taille_y = 550;
 
-	
+	public int nb_frog;
+	public int nb_fly;
+	static int taille_x;
+	static int taille_y;
+
+	public Pond(int nb_frog, int nb_fly, int taille_x, int taille_y) {
+
+		this.nb_frog = nb_frog;
+		this.nb_fly = nb_fly;
+		this.taille_x = taille_x;
+		this.taille_y = taille_y;
+
+	}
+
+	public Pond(int nb_frog, int nb_fly) {
+
+		this(nb_frog, nb_fly, 1000, 667);
+	}
 	
 	/*
 	 * Déroulement de la simulation :
@@ -35,6 +48,7 @@ public class Pond {
      * @param limite_y  La limite en y pour la position aléatoire (int).
      * @return La grenouille créée avec des caractéristiques aléatoires (Frog).
      */
+
 	public static Frog createFrog(int nbFrog, int limite_x, int limite_y) {
 		int speed = 3;
     	int limInfPortee = 1;
