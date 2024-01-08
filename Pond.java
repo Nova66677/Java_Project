@@ -1,5 +1,6 @@
 package MyPackage;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.Scanner;
 import java.util.ArrayList;
 
 
@@ -177,14 +178,21 @@ public class Pond {
         ArrayList<Frog> Frog_array = new ArrayList<>();
         ArrayList<Fly> Fly_array = new ArrayList<>();
         
-        Fly_array = Pond.generateFly(10, taille_y, taille_x);
-        Frog_array = Pond.generateFrog(10, taille_y, taille_x);
+        // Initialisation 
+        
+        System.out.println("<---- Bienvenue dans l'étang !---->");
+        System.out.println("Please enter the desired number of frogs : ");
+        Scanner myInput = new Scanner(System.in);  // On créé notre input
+        int nb_frog = Integer.valueOf(myInput.nextLine());
+        System.out.println("Please enter the desired number of fly : ");
+        int nb_fly = Integer.valueOf(myInput.nextLine());
+        
+        Fly_array = Pond.generateFly(nb_fly, taille_y, taille_x);
+        Frog_array = Pond.generateFrog(nb_frog, taille_y, taille_x);
         
         
         Frog.species = "1331 Frogs";
         
-        // Initialisation 
-        System.out.println("<---- Bienvenue dans l'étang !---->");
         int tour = 0;
         boolean res = false; // On init à une valeure quelconque
         double d;
@@ -193,8 +201,17 @@ public class Pond {
         
         Pond.move_all(10000, Frog_array, Fly_array);
         
+        System.out.println("Enter 'start' to start the simulation");
+        String test = myInput.nextLine();
+        while (test != "start") {
+        	System.out.println("Enter 'start' to start the simulation");
+            test = myInput.nextLine();
+            System.out.println(test);
+        }
+        System.out.println("<--- Starting simulation--->");
+        
         while (tour < 30) {
-        	System.out.println("iter "+tour);
+        	System.out.println("iter " + tour);
         	// On déplace les grenouilles
         	Pond.move_all(1, Frog_array, Fly_array);
         	
