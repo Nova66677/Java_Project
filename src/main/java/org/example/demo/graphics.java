@@ -25,12 +25,14 @@ public class graphics extends Application {
     private Label creditLabel;
     private Stage primaryStage;
     private VBox centerBox;
+    private BorderPane game;
 
     // Attributs du jeu
-    private static final double[] xCoordinates = {50, 150, 250, 100, 200};
-    private static final double[] yCoordinates = {50, 100, 150, 200, 250};
 
-    private Pond etang = new Pond(5, 5);
+    ArrayList<Frog> Frog_array = new ArrayList<>();
+    ArrayList<Fly> Fly_array = new ArrayList<>();
+
+    private Pond etang = new Pond();
 
     public static void main(String[] args) {
         launch(args);
@@ -176,15 +178,13 @@ public class graphics extends Application {
                 BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
 
         // Appliquer l'image de fond au conteneur BorderPane
-        BorderPane game = new BorderPane();
-        game.setBackground(new Background(background));
+        this.game = new BorderPane();
+        this.game.setBackground(new Background(background));
 
         // Créer les mouches et les grenouilles
-        ArrayList<Frog> Frog_array = new ArrayList<>();
-        ArrayList<Fly> Fly_array = new ArrayList<>();
 
-        Fly_array = Pond.generateFly(15, etang.taille_x, etang.taille_y);
-        Frog_array = Pond.generateFrog(15, 500, 300);
+        this.Fly_array = Pond.generateFly(15, 1000, 667);
+        this.Frog_array = Pond.generateFrog(15, 1000, 667);
 
         // affichage et "clickabilité" des grenouilles
         for (Frog f : Frog_array) {
@@ -194,6 +194,7 @@ public class graphics extends Application {
             frog.setOnMouseClicked(this::handleFrogClick);
 
             game.getChildren().add(frog); // Ajouter le cercle au panneau
+
         }
 
         // affichage et "clickabilité" des grenouilles
@@ -202,7 +203,7 @@ public class graphics extends Application {
 
             game.getChildren().add(fly); // Ajouter le cercle au panneau
         }
-
+        Pond.move_all(10000, Frog_array, Fly_array);
         Scene scene = new Scene(game, 1000, 667);
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -226,15 +227,72 @@ public class graphics extends Application {
 
     private void handleFrogClick(MouseEvent event) {
         ImageView clickedFrog = (ImageView) event.getSource();
-        move(clickedFrog);
+        action();
     }
 
-    private void move(ImageView animal) {
-        // Implémentez votre logique de déplacement ici
-        // Par exemple, vous pouvez changer les coordonnées du cercle
-        double newX = animal.getX() + 10;
-        double newY = animal.getY() + 10;
-        animal.setX(newX);
-        animal.setY(newY);
+    private void action() {
+
+        // On déplace la grenouille
+        this.etang.move_all(1, Frog_array, Fly_array);
+
+        ArrayList<Frog> Dead_Frog_array = new ArrayList<>();
+        ArrayList<Fly> Dead_Fly_array = new ArrayList<>();
+
+        // Chaque grenouille doit déterminer les mouches à sa porter
+
+        for (int i=0; i<Frog_array.size(); i++) {
+            Frog frog = Frog_array.get(i);
+            // System.out.println("Je suis Frog " + i + ", position " + frog.getPosition());
+            for (int j=0; j<Fly_array.size(); j++) {
+                Fly fly = Fly_array.get(j);
+                double d = Pond.distance(frog, fly);
+                if (d < frog.getPortee()) {
+                    boolean res = frog.eat(fly);
+                    if (res) {
+                        System.out.println("Une mouche a été mangée");
+                        break;
+                    }
+                }
+            }
+        }
+
+
+        // On vieillis nos Animaux avec leur méthode gettingOlder()
+        for (int i = 0; i < Frog_array.size(); i++) {
+            Frog frog = Frog_array.get(i);
+            frog.gettingOlder();
+            if (frog.isDead() && !Dead_Frog_array.contains(frog)) {
+                Dead_Frog_array.add(frog);
+                System.out.println("Moi, " + frog.getName() + ", je viens de m'éteindre.");
+            }
+        }
+        for (int i = 0; i < Fly_array.size(); i++) {
+            Fly fly = Fly_array.get(i);
+            fly.gettingOlder();
+            if (fly.isDead() && !Dead_Fly_array.contains(fly)) {
+                Dead_Fly_array.add(fly);
+                System.out.println("Moi, " + fly.getName() + ", je viens de m'éteindre.");
+            }
+        }
+    }
+
+    private Frog findFrog(ArrayList<Frog> listFrog, int x, int y) {
+        Frog frog;
+        int i = 0;
+        do {
+            frog = listFrog.get(i);
+            i++;
+        } while (frog.getX() != x && frog.getY() != y);
+        return frog;
+    }
+
+    private ImageView findFly(int x, int y) {
+        ImageView fly;
+        int i = 0;
+        do {
+            fly = (ImageView) this.game.getChildren().get(i);
+            i++;
+        } while (fly.getX() != x && fly.getY() != y);
+        return fly;
     }
 }

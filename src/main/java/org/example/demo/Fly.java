@@ -84,7 +84,7 @@ public class Fly extends Animal{
      */
     public void grow(int addMass) {
 
-        // On fait grossir la mouche de addMass unité de masse, on modifier la vitesse selon sa masse.
+        // On fait grossir la mouche de addMass grammes, on modifier la vitesse selon sa masse.
 
         for (int i=0; i<addMass; i++){
             this.mass++;

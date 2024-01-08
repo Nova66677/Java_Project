@@ -1,5 +1,6 @@
 package org.example.demo;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.Scanner;
 import java.util.ArrayList;
 
 
@@ -7,25 +8,12 @@ import java.util.ArrayList;
  * Classe représentant un étang où des grenouilles et des mouches interagissent.
  */
 public class Pond {
+	
+	// On définit la taille de notre étang
+	private static int taille_x = 1000;
+	private static int taille_y = 667;
 
-	public int nb_frog;
-	public int nb_fly;
-	static int taille_x;
-	static int taille_y;
-
-	public Pond(int nb_frog, int nb_fly, int taille_x, int taille_y) {
-
-		this.nb_frog = nb_frog;
-		this.nb_fly = nb_fly;
-		this.taille_x = taille_x;
-		this.taille_y = taille_y;
-
-	}
-
-	public Pond(int nb_frog, int nb_fly) {
-
-		this(nb_frog, nb_fly, 1000, 667);
-	}
+	
 	
 	/*
 	 * Déroulement de la simulation :
@@ -48,7 +36,6 @@ public class Pond {
      * @param limite_y  La limite en y pour la position aléatoire (int).
      * @return La grenouille créée avec des caractéristiques aléatoires (Frog).
      */
-
 	public static Frog createFrog(int nbFrog, int limite_x, int limite_y) {
 		int speed = 3;
     	int limInfPortee = 1;
@@ -58,8 +45,8 @@ public class Pond {
     	int limInfTS = 2;
     	int limSupTS = 5;
     	int Lifespan = 12; // En réalité, c'est en moyenne 12 semaines mais on va dire 12 mois sinon la simulation sera trop court
-    	int x = ThreadLocalRandom.current().nextInt(-limite_x, limite_x + 1);
-		int y = ThreadLocalRandom.current().nextInt(-limite_y, limite_y + 1);
+    	int x = ThreadLocalRandom.current().nextInt(0, limite_x + 1);
+		int y = ThreadLocalRandom.current().nextInt(0, limite_y + 1);
 		int age = ThreadLocalRandom.current().nextInt(limInfAge, limSupAge + 1);
 		int portee = ThreadLocalRandom.current().nextInt(limInfPortee, limSupPortee + 1);
 		int tongueSpeed = ThreadLocalRandom.current().nextInt(limInfTS, limSupTS + 1);
@@ -100,8 +87,8 @@ public class Pond {
     	int limInfAge = 1;
     	int limSupAge = 5;
     	int Lifespan = 10; // En réalité, c'est en moyenne 12 semaines mais on va dire 12 mois sinon la simulation sera trop court
-    	int x = ThreadLocalRandom.current().nextInt(-limite_x, limite_x + 1);
-		int y = ThreadLocalRandom.current().nextInt(-limite_y, limite_y + 1);
+    	int x = ThreadLocalRandom.current().nextInt(0, limite_x + 1);
+		int y = ThreadLocalRandom.current().nextInt(0, limite_y + 1);
 		int age = ThreadLocalRandom.current().nextInt(limInfAge, limSupAge + 1);
 		int mass = 1;
 		Fly fly = new Fly(Integer.toString(nbFly), speed, x, y, Lifespan, age, mass);
@@ -140,7 +127,7 @@ public class Pond {
 		int xFrog = frog.getX();
 		int yFrog = frog.getY();
 		
-		double d = Math.sqrt((xFly - xFrog)^2 + (yFrog - yFly)^2);
+		double d = Math.sqrt(Math.pow(xFly - xFrog, 2) + Math.pow(yFrog - yFly, 2));
 		return d;
 	}
 	
@@ -153,28 +140,33 @@ public class Pond {
      * @param Fly_array   La liste des mouches (ArrayList<Fly>).
      */
 	public static void move_all(int nbTour, ArrayList<Frog> Frog_array, ArrayList<Fly> Fly_array) {
-		int dx, dy;
-		int min = -1;
+		int dx, dy;     // Déplacement des Frogs lors de ce tour
+		int min = -1;  // Ces deux variables servent pour le deplacement des mouches
 		int max = 1;
-		for (int i=0; i<10000; i++) {
+		for (int i=0; i<nbTour; i++) {
 	    	for (int j=0; j<Frog_array.size(); j++) {
 	    		Frog frog = Frog_array.get(j);
-	    		dx = ThreadLocalRandom.current().nextInt(min, max + 1) * 10;
-	    		dy = ThreadLocalRandom.current().nextInt(min, max + 1) * 10;
-	    		
-	    		frog.move(dx, dy);
+	    		dx = ThreadLocalRandom.current().nextInt(-(int)frog.getSpeed(), (int)frog.getSpeed() + 1) * 10;
+	    		dy = ThreadLocalRandom.current().nextInt(-(int)frog.getSpeed(), (int)frog.getSpeed() + 1) * 10;
+	    		int frog_x = frog.getX();
+	    		int frog_y = frog.getY();
+	    		int new_coordX = frog_x + dx;
+	    		int new_coordY = frog_y + dy;
+	    		if ((new_coordX >= -taille_x && new_coordX <= taille_x) && (new_coordY >= -taille_y && new_coordY <= taille_y )) {
+	    			frog.move(dx, dy);
+	    		}
 	    	}
 	    	
 	    	// Et maintenant, on déplace les mouches
 	    	for (int k=0; k<Fly_array.size(); k++) {
 	    		Fly fly = Fly_array.get(k);
-	    		dx = ThreadLocalRandom.current().nextInt(min, max + 1);
-	    		dy = ThreadLocalRandom.current().nextInt(min, max + 1);
+	    		dx = ThreadLocalRandom.current().nextInt(min, max + 1) * 10;
+	    		dy = ThreadLocalRandom.current().nextInt(min, max + 1) * 10;
 	    		int fly_x = fly.getX();
 	    		int fly_y = fly.getY();
 	    		int new_coordX = fly_x + dx;
 	    		int new_coordY = fly_y + dy;
-	    		if ((new_coordX > -taille_x || new_coordX < taille_x) && (new_coordY > -taille_y || new_coordY < taille_y )) {
+	    		if ((new_coordX >= -taille_x && new_coordX <= taille_x) && (new_coordY >= -taille_y && new_coordY <= taille_y )) {
 	    			fly.move(dx, dy);
 	    		}
 	    	}
@@ -191,14 +183,34 @@ public class Pond {
         ArrayList<Frog> Frog_array = new ArrayList<>();
         ArrayList<Fly> Fly_array = new ArrayList<>();
         
-        Fly_array = Pond.generateFly(10, taille_y, taille_x);
-        Frog_array = Pond.generateFrog(10, taille_y, taille_x);
+        // On créé deux autres tableaux pour y stocker des les mouches et les grenouilles mortes 
+        ArrayList<Frog> Dead_Frog_array = new ArrayList<>();
+        ArrayList<Fly> Dead_Fly_array = new ArrayList<>();
+        
+        
+        int nb_frog = 0;
+        int nb_fly = 0;
+        Scanner myInput = new Scanner(System.in);  // On créé notre input
+        // Initialisation 
+        while (nb_frog == 0 && nb_fly == 0) {
+	        try {
+		        System.out.println("<---- Bienvenue dans l'étang !---->");
+		        System.out.println("Please enter the desired number of frogs : ");
+		        
+		        
+		        nb_frog = Integer.valueOf(myInput.nextLine());
+		        System.out.println("Please enter the desired number of fly : ");
+		        nb_fly = Integer.valueOf(myInput.nextLine());
+	        } catch (NumberFormatException e) {
+	        	System.out.println("Vous devez entrer un entier !");
+	        }
+        }
+        Fly_array = Pond.generateFly(nb_fly, taille_y, taille_x);
+        Frog_array = Pond.generateFrog(nb_frog, taille_y, taille_x);
         
         
         Frog.species = "1331 Frogs";
         
-        // Initialisation 
-        System.out.println("<---- Bienvenue dans l'étang !---->");
         int tour = 0;
         boolean res = false; // On init à une valeure quelconque
         double d;
@@ -207,8 +219,18 @@ public class Pond {
         
         Pond.move_all(10000, Frog_array, Fly_array);
         
+        System.out.println("Enter 'start' to start the simulation");
+        String test = myInput.nextLine();
+        while (!test.equals("start")){
+        	System.out.println("Enter 'start' to start the simulation");
+            test = myInput.nextLine();
+            System.out.println(test);
+        }
+        myInput.close(); // On ferme notre Scanner que l'on n'utilisera plus
+        System.out.println("<--- Starting simulation--->");
+        
         while (tour < 30) {
-        	System.out.println("iter "+tour);
+        	System.out.println("iter " + tour);
         	// On déplace les grenouilles
         	Pond.move_all(1, Frog_array, Fly_array);
         	
@@ -216,6 +238,7 @@ public class Pond {
         	
         	for (int i=0; i<Frog_array.size(); i++) {
         		Frog frog = Frog_array.get(i);
+        		// System.out.println("Je suis Frog " + i + ", position " + frog.getPosition());
         		for (int j=0; j<Fly_array.size(); j++) {
         			Fly fly = Fly_array.get(j);
         			d = Pond.distance(frog, fly);
@@ -228,7 +251,37 @@ public class Pond {
         			}
         		}
         	}
-        	tour++;
+        	
+        	// On vieillis nos Animaux avec leur méthode gettingOlder()
+            for (int i=0; i<Frog_array.size(); i++) {
+            	Frog frog = Frog_array.get(i);
+            	frog.gettingOlder();
+            	if (frog.isDead() && !Dead_Frog_array.contains(frog) ) {
+            		Dead_Frog_array.add(frog);
+            		System.out.println("Moi, " + frog.getName() + ", je viens de m'éteindre.");
+            	}
+            }
+            for (int i=0; i<Fly_array.size(); i++) {
+            	Fly fly = Fly_array.get(i);
+            	fly.gettingOlder();
+            	if (fly.isDead() && !Dead_Fly_array.contains(fly) ) {
+            		Dead_Fly_array.add(fly);
+            		System.out.println("Moi, " + fly.getName() + ", je viens de m'éteindre.");
+            	}
+            }
+            
+        	tour++; // On n'oublie pas d'incrémenter notre tour
+        }
+        
+        // A la fin de la simulation, on affiche l'état de nos Animaux
+        
+        for (int i=0; i<Frog_array.size(); i++) {
+        	Frog frog = Frog_array.get(i);
+        	System.out.println(frog.toString());
+        }
+        for (int i=0; i<Fly_array.size(); i++) {
+        	Fly fly = Fly_array.get(i);
+        	System.out.println(fly.toString());
         }
 	}
 }
