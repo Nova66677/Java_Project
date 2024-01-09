@@ -1,5 +1,6 @@
-package org.example.demo;
-
+import org.example.demo.Fly;
+import org.example.demo.Frog;
+import org.example.demo.Pond;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -13,8 +14,8 @@ class PondTest {
     @BeforeEach
     void setUp() {
         // Initialiser avec un nombre fixe de grenouilles et de mouches pour la cohérence du test
-        frogArray = Pond.generateFrog(5, Pond.taille_x, Pond.taille_y);
-        flyArray = Pond.generateFly(5, Pond.taille_x, Pond.taille_y);
+        frogArray = Pond.generateFrog(5, Pond.getTaille_x(), Pond.getTaille_y());
+        flyArray = Pond.generateFly(5, Pond.getTaille_x(), Pond.getTaille_y());
     }
 
     // Test pour la génération de grenouilles
