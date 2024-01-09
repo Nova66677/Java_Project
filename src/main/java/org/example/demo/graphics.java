@@ -18,6 +18,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.shape.Line;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 
 public class graphics extends Application {
 
@@ -38,7 +39,8 @@ public class graphics extends Application {
     private ArrayList<Frog> Frog_array = new ArrayList<>();
     private ArrayList<Fly> Fly_array = new ArrayList<>();
     private Pond etang = new Pond();
-    private Label score;
+    private Text text;
+    private int score = 0;
 
     public static void main(String[] args) {
         launch(args);
@@ -190,6 +192,13 @@ public class graphics extends Application {
         this.game = new BorderPane();
         this.game.setBackground(new Background(background));
 
+        this.text = new Text("Score : 0");
+        text.setFill(Color.BLUE);
+        text.setX(10); // position en X
+        text.setY(30); // position en Y
+
+        this.game.getChildren().add(this.text);
+
         // Créer les mouches et les grenouilles
 
         this.Fly_array = Pond.generateFly(15, 1000, 667);
@@ -254,7 +263,8 @@ public class graphics extends Application {
                     System.out.println("Une mouche a été mangée");
                     ImageView f = findIFly(fly.getX(), fly.getY());
                     f.setVisible(false);
-
+                    this.score++;
+                    this.text.setText("Score : " + this.score);
                     double X = frog.getX() + 20;
                     double Y = frog.getY() + 20;
                     Line line = new Line(X, Y, fly.getX(), fly.getY());
@@ -267,8 +277,6 @@ public class graphics extends Application {
                             new KeyFrame(Duration.millis(500), e -> line.setVisible(false))
 
                     );
-
-                    // Lancer l'animation
                     timeline.play();
                     break;
                 }
@@ -302,7 +310,7 @@ public class graphics extends Application {
     }
 
     private ImageView findIFly(int x, int y) {
-        int i = 0;
+        int i = 1;
         ImageView fly;
         do {
             fly = (ImageView) this.game.getChildren().get(i);
