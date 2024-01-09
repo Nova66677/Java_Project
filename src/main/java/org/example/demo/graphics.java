@@ -211,14 +211,11 @@ public class graphics extends Application {
         // affichage et "clickabilité" des grenouilles
         for (Fly f : Fly_array) {
             ImageView fly = createFly(f.getX(), f.getY());
+            fly.setOnMouseClicked(this::handleFlyClick);
             game.getChildren().add(fly);
         }
-        //Pond.move_all(10000, Frog_array, Fly_array);
-        Scene scene = new Scene(game, 1000, 667);
 
-        Timeline moveTimeline = new Timeline(new KeyFrame(Duration.millis(500), e -> flyMove()));
-        moveTimeline.setCycleCount(Timeline.INDEFINITE);
-        moveTimeline.play();
+        Scene scene = new Scene(game, 1000, 667);
 
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -243,12 +240,16 @@ public class graphics extends Application {
     private void handleFrogClick(MouseEvent event) {
         ImageView clickedFrog = (ImageView) event.getSource();
         Frog frog = findFrog((int) clickedFrog.getX(), (int) clickedFrog.getY());
-        action(frog);
+        actionFrog(frog);
     }
 
-    private void action(Frog frog) {
+    private void handleFlyClick(MouseEvent event) {
+        ImageView clickedFly = (ImageView) event.getSource();
+        Fly fly = findFly((int) clickedFly.getX(), (int) clickedFly.getY());
+        actionFly(fly, clickedFly);
+    }
 
-        //frog.move(10, 10);
+    private void actionFrog(Frog frog) {
 
         for (int j = 0; j < Fly_array.size(); j++) {
             Fly fly = Fly_array.get(j);
@@ -257,56 +258,28 @@ public class graphics extends Application {
                 boolean res = frog.eat(fly);
                 if (res) {
                     System.out.println("Une mouche a été mangée");
-                    ImageView f = findFly(fly.getX(), fly.getY());
+                    ImageView f = findIFly(fly.getX(), fly.getY());
                     f.setVisible(false);
-
 
                     break;
                 }
             }
+        }
+    }
 
-
-
-
-        /*ArrayList<Frog> Dead_Frog_array = new ArrayList<>();
-        ArrayList<Fly> Dead_Fly_array = new ArrayList<>();
-
-        // Chaque grenouille doit déterminer les mouches à sa porter
-
-        for (int i = 0; i < Frog_array.size(); i++) {
-            Frog frog = Frog_array.get(i);
-             for (int j = 0; j < Fly_array.size(); j++) {
-                Fly fly = Fly_array.get(j);
-                double d = Pond.distance(frog, fly);
-                if (d < frog.getPortee()) {
-                    boolean res = frog.eat(fly);
-                    if (res) {
-                        System.out.println("Une mouche a été mangée");
-                        break;
-                    }
-                }
-            }
+    private void actionFly(Fly fly, ImageView iFly) {
+        double dx = ThreadLocalRandom.current().nextInt(-(int) fly.getSpeed(), (int) fly.getSpeed() + 1) * fly.getSpeed();
+        double dy = ThreadLocalRandom.current().nextInt(-(int) fly.getSpeed(), (int) fly.getSpeed() + 1) * fly.getSpeed();
+        int fly_x = fly.getX();
+        int fly_y = fly.getY();
+        double new_coordX = fly_x + dx;
+        double new_coordY = fly_y + dy;
+        if ((new_coordX >= 0 && new_coordX <= 1000) && (new_coordY >= 0 && new_coordY <= 667)) {
+            fly.move((int) dx, (int) dy);
+            iFly.setX(new_coordX);
+            iFly.setY(new_coordY);
         }
 
-
-        // On vieillis nos Animaux avec leur méthode gettingOlder()
-        for (int i = 0; i < Frog_array.size(); i++) {
-            Frog frog = Frog_array.get(i);
-            frog.gettingOlder();
-            if (frog.isDead() && !Dead_Frog_array.contains(frog)) {
-                Dead_Frog_array.add(frog);
-                System.out.println("Moi, " + frog.getName() + ", je viens de m'éteindre.");
-            }
-        }
-        for (int i = 0; i < Fly_array.size(); i++) {
-            Fly fly = Fly_array.get(i);
-            fly.gettingOlder();
-            if (fly.isDead() && !Dead_Fly_array.contains(fly)) {
-                Dead_Fly_array.add(fly);
-                System.out.println("Moi, " + fly.getName() + ", je viens de m'éteindre.");
-            }
-        }*/
-        }
     }
 
     private Frog findFrog(int x, int y) {
@@ -319,7 +292,7 @@ public class graphics extends Application {
         return frog;
     }
 
-    private ImageView findFly(int x, int y) {
+    private ImageView findIFly(int x, int y) {
         int i = 0;
         ImageView fly;
         do {
@@ -329,22 +302,14 @@ public class graphics extends Application {
         return fly;
     }
 
-    private void flyMove() {
-        System.out.println("Move");
-        for (int k = 0; k < this.Fly_array.size(); k++) {
-            Fly fly = this.Fly_array.get(k);
-            double dx = ThreadLocalRandom.current().nextInt(-1, 2) * 10;
-            double dy = ThreadLocalRandom.current().nextInt(-1, 2) * 10;
-            int fly_x = fly.getX();
-            int fly_y = fly.getY();
-            double new_coordX = fly_x + dx;
-            double new_coordY = fly_y + dy;
-            ImageView iFly = findFly(fly_x, fly_y);
-            if ((new_coordX >= 0 && new_coordX <= 1000) && (new_coordY >= 0 && new_coordY <= 667)) {
-                fly.move((int) dx, (int) dy);
-                iFly.setX(new_coordX);
-                iFly.setY(new_coordY);
-            }
-        }
+    private Fly findFly(int x, int y) {
+        int i = 0;
+        Fly fly;
+        do {
+            fly = Fly_array.get(i);
+            i++;
+        } while (fly.getX() != x && fly.getY() != y);
+        return fly;
     }
 }
+
