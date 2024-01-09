@@ -19,8 +19,7 @@ import javafx.animation.Timeline;
 import javafx.scene.shape.Line;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
+
 import java.io.File;
 
 public class graphics extends Application {
