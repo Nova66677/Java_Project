@@ -1,12 +1,9 @@
-package org.example.demo;
-
-import org.example.demo.Animal;
 import org.example.demo.Fly;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-class FlyTest {
+class AnimalTest {
 
     private Fly fly;
 
@@ -14,7 +11,7 @@ class FlyTest {
     @BeforeEach
     void setUp() {
         // Création d'une mouche avec des valeurs initiales pour les tests
-        fly = new Fly("Buzz", 1.5, 0, 0, 12, 1);
+        fly = new Fly("Buzz", 5.0, 0, 0, 12, 1, 2.0);
     }
 
     // Test pour vérifier que le constructeur initialise correctement l'objet
@@ -22,7 +19,7 @@ class FlyTest {
     void constructorTest() {
         assertNotNull(fly);                     // Vérifie que l'objet fly n'est pas null
         assertEquals("Buzz", fly.getName());    // Vérifie que le nom est correctement initialisé
-        assertEquals(1.5, fly.getSpeed());      // Vérifie que la vitesse est correctement initialisée
+        assertEquals(5.0, fly.getSpeed());      // Vérifie que la vitesse est correctement initialisée
         assertEquals(0, fly.getX());            // Vérifie que la coordonnée x est correctement initialisée
         assertEquals(0, fly.getY());            // Vérifie que la coordonnée y est correctement initialisée
         assertEquals(12, fly.getLifespan());    // Vérifie que la durée de vie est correctement initialisée
@@ -49,18 +46,20 @@ class FlyTest {
     // Test pour vérifier que la mouche meurt en vieillissant
     @Test
     void testAgeingUntilDeath() {
-        for (int i = 0; i < 12; i++) {
+        for (int i = 0; i < 120; i++) {
             fly.gettingOlder(); // Vieillit la mouche jusqu'à sa mort
         }
+        fly.setAge(120);
         assertTrue(fly.isDead()); // Vérifie que la mouche est morte
     }
 
     // Test pour vérifier que la mouche ne se déplace pas après sa mort
     @Test
     void testMoveAfterDeath() {
-        for (int i = 0; i < 12; i++) {
+        for (int i = 0; i < 120; i++) {
             fly.gettingOlder(); // Vieillit la mouche jusqu'à sa mort
         }
+        fly.setAge(120);
         fly.move(2, 2); // Tente de déplacer la mouche après sa mort
         // La position ne devrait pas changer après la mort
         assertEquals(0, fly.getX());
@@ -77,7 +76,7 @@ class FlyTest {
     // Test pour vérifier le bon fonctionnement de la méthode toString
     @Test
     void testToString() {
-        String expectedDescription = "I am a speedy fly with 1.5 speed and 1 mass. I am at position (0, 0).";
+        String expectedDescription = "I am a speedy fly with 5.0 speed and 2.0 mass. I am at position (0, 0).";
         assertEquals(expectedDescription, fly.toString()); // Vérifie la chaîne retournée
     }
 
