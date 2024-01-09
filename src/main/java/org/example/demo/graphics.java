@@ -4,22 +4,20 @@ import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.animation.Timeline;
-import javafx.animation.KeyFrame;
-import javafx.util.Duration;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
-import javafx.scene.shape.Line;
 import javafx.stage.Stage;
-import javafx.scene.paint.Color;
-import javafx.animation.PauseTransition;
-
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
+import javafx.util.Duration;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.scene.shape.Line;
+import javafx.scene.paint.Color;
 
 public class graphics extends Application {
 
@@ -32,14 +30,15 @@ public class graphics extends Application {
     private Label creditLabel;
     private Stage primaryStage;
     private VBox centerBox;
-    private BorderPane game;
+
 
     // Attributs du jeu
 
+    private BorderPane game;
     private ArrayList<Frog> Frog_array = new ArrayList<>();
     private ArrayList<Fly> Fly_array = new ArrayList<>();
-
     private Pond etang = new Pond();
+    private Label score;
 
     public static void main(String[] args) {
         launch(args);
@@ -184,17 +183,12 @@ public class graphics extends Application {
                 BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT,
                 BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
 
-        // Appliquer l'image de fond au conteneur BorderPane
+        BorderPane root = new BorderPane();
+
+        // Appliquer l'image de fond au conteneur BorderPan
+
         this.game = new BorderPane();
         this.game.setBackground(new Background(background));
-
-        // Créer la langue
-
-        Line line = new Line(0, 0, 0, 0);
-        line.setStroke(Color.RED);
-        //this.game.getChildren().add(line);
-        //line.setVisible(false);
-
 
         // Créer les mouches et les grenouilles
 
@@ -215,7 +209,7 @@ public class graphics extends Application {
             game.getChildren().add(fly);
         }
 
-        Scene scene = new Scene(game, 1000, 667);
+        Scene scene = new Scene(this.game, 1000, 667);
 
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -261,6 +255,21 @@ public class graphics extends Application {
                     ImageView f = findIFly(fly.getX(), fly.getY());
                     f.setVisible(false);
 
+                    double X = frog.getX() + 20;
+                    double Y = frog.getY() + 20;
+                    Line line = new Line(X, Y, fly.getX(), fly.getY());
+                    line.setStroke(Color.BLACK);
+
+                    this.game.getChildren().add(line);
+
+                    Timeline timeline = new Timeline(
+                            new KeyFrame(Duration.ZERO, e -> line.setStroke(Color.RED)),
+                            new KeyFrame(Duration.millis(500), e -> line.setVisible(false))
+
+                    );
+
+                    // Lancer l'animation
+                    timeline.play();
                     break;
                 }
             }
