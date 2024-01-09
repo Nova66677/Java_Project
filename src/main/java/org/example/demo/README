@@ -1,0 +1,8 @@
+<---Lancement du jeu--->
+
+Il sera surement necessaire de créer une configuration pour lancer le jeu, du type application avec java 21 sdk
+avec -cp "demo"
+
+Le jeu se lance en executant le fichier graphics.java
+Pour lancer les tests, j'ai dû mettre le repertoire test en Test Root.
+La javadoc se situe dans le reperoire javadoc
