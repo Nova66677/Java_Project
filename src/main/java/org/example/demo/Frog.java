@@ -55,7 +55,7 @@ public class Frog extends Animal {
     /**
      * Constructeur pour créer une grenouille avec un nom, un âge en mois et une vitesse de la langue.
      * @param name Le nom de la grenouille (String).
-     * @param age L'âge de la grenouille en mois (int).
+     * @param ageM L'âge de la grenouille en mois (int).
      * @param tongueSpeed La vitesse de la langue de la grenouille (int).
      */
     public Frog(String name, double speed, int x, int y, int lifespanM, int ageM, int portee, double tongueSpeed) { // Si 3 parametres spécifiés avec un age en entier, on assigne les paramètres avec une conditions sur la vitesse de la langue
@@ -146,7 +146,7 @@ public class Frog extends Animal {
     
     /**
      * Modifie l'espèce de la grenouille.
-     * @param newSpecies La nouvelle espèce de la grenouille (String).
+     * @param newSpecie La nouvelle espèce de la grenouille (String).
      */
     public void setSpecies(String newSpecie){
         species = newSpecie;
