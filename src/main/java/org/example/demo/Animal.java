@@ -6,12 +6,12 @@ package org.example.demo;
  */
 abstract public class Animal {
 	
-	private String name;
+	private final String name;
 	private int age;
 	private double speed; 
 	private int x;
 	private int y;
-	private int lifespan;
+	private final int lifespan;
 	private boolean dead;
 	
 	
@@ -61,9 +61,10 @@ abstract public class Animal {
      * @param age Le nouvel âge de l'animal en mois (int).
      */
 	public void setAge(int age) {
-		this.age = age;
-		if (this.getAge() == this.lifespan) {
+		if (this.getAge() >= this.lifespan) {
 			this.dead = true;
+		} else {
+			this.age = age;
 		}
 	}
 	
@@ -80,7 +81,7 @@ abstract public class Animal {
     // Setters definiton
     /**
      * Modifie la vitesse de l'Animal.
-     * @param newSpeed La nouvelle vitesse de l'Animal (double).
+     * @param speed La nouvelle vitesse de l'Animal (double).
      */
 	public void setSpeed(double speed) {
 		this.speed = speed;
@@ -136,6 +137,14 @@ abstract public class Animal {
 		return lifespan;
 	}
 
+	public boolean getDead() {
+		return this.dead;
+	}
+
+	public void setDead(boolean value) {
+		this.dead = value;
+	}
+
 	
 	// Definition des méthodes 
 	
@@ -153,7 +162,8 @@ abstract public class Animal {
 	}
 	
 	public void gettingOlder() {
-		this.setAge(this.getAge()+1);
+		int age = this.getAge();
+		this.setAge(age+1);
 	}
 	
     /**
@@ -162,7 +172,7 @@ abstract public class Animal {
      * @return true si l'animal est mort, sinon false (boolean).
      */
 	public boolean isDead() {
-		if (this.lifespan <= this.age) {
+		if (this.lifespan <= this.getAge()) {
 			this.dead = true;
 		}
 		return this.dead;
