@@ -10,10 +10,18 @@ import java.util.ArrayList;
 public class Pond {
 	
 	// On définit la taille de notre étang
-	private static int taille_x = 1000;
-	private static int taille_y = 667;
+	private final static int taille_x = 1000;
+	private final static int taille_y = 667;
 
-	
+	public static int getTaille_x() {
+		return taille_x;
+	}
+
+	public static int getTaille_y() {
+		return taille_y;
+	}
+
+
 	
 	/*
 	 * Déroulement de la simulation :
