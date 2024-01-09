@@ -38,8 +38,8 @@ public class Pond {
      */
 	public static Frog createFrog(int nbFrog, int limite_x, int limite_y) {
 		int speed = 3;
-    	int limInfPortee = 1;
-    	int limSupPortee = 5;
+    	int limInfPortee = 500;
+    	int limSupPortee = 500;
     	int limInfAge = 1;
     	int limSupAge = 5;
     	int limInfTS = 2;

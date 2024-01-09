@@ -4,15 +4,22 @@ import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.animation.Timeline;
+import javafx.animation.KeyFrame;
+import javafx.util.Duration;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.shape.Line;
 import javafx.stage.Stage;
+import javafx.scene.paint.Color;
+import javafx.animation.PauseTransition;
 
 import java.util.ArrayList;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class graphics extends Application {
 
@@ -29,8 +36,8 @@ public class graphics extends Application {
 
     // Attributs du jeu
 
-    ArrayList<Frog> Frog_array = new ArrayList<>();
-    ArrayList<Fly> Fly_array = new ArrayList<>();
+    private ArrayList<Frog> Frog_array = new ArrayList<>();
+    private ArrayList<Fly> Fly_array = new ArrayList<>();
 
     private Pond etang = new Pond();
 
@@ -41,7 +48,7 @@ public class graphics extends Application {
     @Override
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
-        this.primaryStage.setTitle("Écran Titre");
+        this.primaryStage.setTitle("Projet java");
         this.primaryStage.setMinWidth(1000); // Définir la largeur minimale de la fenêtre
         this.primaryStage.setMinHeight(667); // Définir la hauteur minimale de la fenêtre
 
@@ -168,7 +175,7 @@ public class graphics extends Application {
         this.exitButton.setVisible(false);
     }
 
-    private void run(){
+    private void run() {
         // Charger l'image d'arrière-plan
         Image backgroundImage = new Image(getClass().getResourceAsStream("/gameBackground.jpg"));
 
@@ -181,30 +188,38 @@ public class graphics extends Application {
         this.game = new BorderPane();
         this.game.setBackground(new Background(background));
 
+        // Créer la langue
+
+        Line line = new Line(0, 0, 0, 0);
+        line.setStroke(Color.RED);
+        //this.game.getChildren().add(line);
+        //line.setVisible(false);
+
+
         // Créer les mouches et les grenouilles
 
         this.Fly_array = Pond.generateFly(15, 1000, 667);
-        this.Frog_array = Pond.generateFrog(15, 1000, 667);
+        this.Frog_array = Pond.generateFrog(1, 1000, 667);
 
         // affichage et "clickabilité" des grenouilles
         for (Frog f : Frog_array) {
             ImageView frog = createFrog(f.getX(), f.getY());
-
-            // Ajouter un gestionnaire d'événements au cercle
             frog.setOnMouseClicked(this::handleFrogClick);
-
-            game.getChildren().add(frog); // Ajouter le cercle au panneau
-
+            game.getChildren().add(frog);
         }
 
         // affichage et "clickabilité" des grenouilles
         for (Fly f : Fly_array) {
             ImageView fly = createFly(f.getX(), f.getY());
-
-            game.getChildren().add(fly); // Ajouter le cercle au panneau
+            game.getChildren().add(fly);
         }
-        Pond.move_all(10000, Frog_array, Fly_array);
+        //Pond.move_all(10000, Frog_array, Fly_array);
         Scene scene = new Scene(game, 1000, 667);
+
+        Timeline moveTimeline = new Timeline(new KeyFrame(Duration.millis(500), e -> flyMove()));
+        moveTimeline.setCycleCount(Timeline.INDEFINITE);
+        moveTimeline.play();
+
         primaryStage.setScene(scene);
         primaryStage.show();
     }
@@ -227,23 +242,40 @@ public class graphics extends Application {
 
     private void handleFrogClick(MouseEvent event) {
         ImageView clickedFrog = (ImageView) event.getSource();
-        action();
+        Frog frog = findFrog((int) clickedFrog.getX(), (int) clickedFrog.getY());
+        action(frog);
     }
 
-    private void action() {
+    private void action(Frog frog) {
 
-        // On déplace la grenouille
-        this.etang.move_all(1, Frog_array, Fly_array);
+        //frog.move(10, 10);
 
-        ArrayList<Frog> Dead_Frog_array = new ArrayList<>();
+        for (int j = 0; j < Fly_array.size(); j++) {
+            Fly fly = Fly_array.get(j);
+            double d = Pond.distance(frog, fly);
+            if (d < frog.getPortee()) {
+                boolean res = frog.eat(fly);
+                if (res) {
+                    System.out.println("Une mouche a été mangée");
+                    ImageView f = findFly(fly.getX(), fly.getY());
+                    f.setVisible(false);
+
+
+                    break;
+                }
+            }
+
+
+
+
+        /*ArrayList<Frog> Dead_Frog_array = new ArrayList<>();
         ArrayList<Fly> Dead_Fly_array = new ArrayList<>();
 
         // Chaque grenouille doit déterminer les mouches à sa porter
 
-        for (int i=0; i<Frog_array.size(); i++) {
+        for (int i = 0; i < Frog_array.size(); i++) {
             Frog frog = Frog_array.get(i);
-            // System.out.println("Je suis Frog " + i + ", position " + frog.getPosition());
-            for (int j=0; j<Fly_array.size(); j++) {
+             for (int j = 0; j < Fly_array.size(); j++) {
                 Fly fly = Fly_array.get(j);
                 double d = Pond.distance(frog, fly);
                 if (d < frog.getPortee()) {
@@ -273,26 +305,46 @@ public class graphics extends Application {
                 Dead_Fly_array.add(fly);
                 System.out.println("Moi, " + fly.getName() + ", je viens de m'éteindre.");
             }
+        }*/
         }
     }
 
-    private Frog findFrog(ArrayList<Frog> listFrog, int x, int y) {
-        Frog frog;
+    private Frog findFrog(int x, int y) {
         int i = 0;
+        Frog frog;
         do {
-            frog = listFrog.get(i);
+            frog = this.Frog_array.get(i);
             i++;
         } while (frog.getX() != x && frog.getY() != y);
         return frog;
     }
 
     private ImageView findFly(int x, int y) {
-        ImageView fly;
         int i = 0;
+        ImageView fly;
         do {
             fly = (ImageView) this.game.getChildren().get(i);
             i++;
         } while (fly.getX() != x && fly.getY() != y);
         return fly;
+    }
+
+    private void flyMove() {
+        System.out.println("Move");
+        for (int k = 0; k < this.Fly_array.size(); k++) {
+            Fly fly = this.Fly_array.get(k);
+            double dx = ThreadLocalRandom.current().nextInt(-1, 2) * 10;
+            double dy = ThreadLocalRandom.current().nextInt(-1, 2) * 10;
+            int fly_x = fly.getX();
+            int fly_y = fly.getY();
+            double new_coordX = fly_x + dx;
+            double new_coordY = fly_y + dy;
+            ImageView iFly = findFly(fly_x, fly_y);
+            if ((new_coordX >= 0 && new_coordX <= 1000) && (new_coordY >= 0 && new_coordY <= 667)) {
+                fly.move((int) dx, (int) dy);
+                iFly.setX(new_coordX);
+                iFly.setY(new_coordY);
+            }
+        }
     }
 }
