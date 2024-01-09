@@ -19,6 +19,9 @@ import javafx.animation.Timeline;
 import javafx.scene.shape.Line;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import java.io.File;
 
 public class graphics extends Application {
 
@@ -38,7 +41,7 @@ public class graphics extends Application {
     private BorderPane game;
     private ArrayList<Frog> Frog_array = new ArrayList<>();
     private ArrayList<Fly> Fly_array = new ArrayList<>();
-    private Pond etang = new Pond();
+    private final Pond etang = new Pond();
     private Text text;
     private int score = 0;
 
@@ -198,6 +201,13 @@ public class graphics extends Application {
         text.setY(30); // position en Y
 
         this.game.getChildren().add(this.text);
+
+        // Lance la musique d'ambiance
+
+        // String musicFile = "Swamp Ambience at Dusk.mp3";     // For example
+        //Media sound = new Media(getClass().getResource("Swamp Ambience at Dusk.mp3").toExternalForm());
+        //MediaPlayer mediaPlayer = new MediaPlayer(sound);
+        //mediaPlayer.play();
 
         // Créer les mouches et les grenouilles
 
