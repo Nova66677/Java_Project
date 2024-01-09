@@ -102,12 +102,11 @@ public class Fly extends Animal{
      * Vérifie si la mouche est morte.
      * @return true si la mouche est morte, sinon false (boolean).
      */
+
     public boolean isDead() {
-        // On verifie la valeur de la masse de la Fly, si elle vaut 0 alors elle est considérée comme morte
-        if (mass == 0) {
-            return true;
-        } else {
-            return false;
+        if (this.getLifespan() <= this.getAge() || this.getMass() == 0) {
+            this.setDead(true);
         }
+        return this.getDead();
     }
 }
