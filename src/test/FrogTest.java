@@ -1,4 +1,4 @@
-package org.example.demo;
+import org.example.demo.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,7 +12,7 @@ class FrogTest {
     @BeforeEach
     void setUp() {
         frog = new Frog("Peepaw", 1.0, 0, 0, 50, 12, 10, 6);
-        fly = new Fly("Buzz", 1.5, 0, 0, 12, 1);
+        fly = new Fly("Buzz", 1.5, 0, 0, 12, 1, 7);
     }
 
     // Test du premier constructeur
@@ -59,6 +59,7 @@ class FrogTest {
     // Test pour la méthode eat
     @Test
     void testEat() {
+
         assertTrue(frog.eat(fly));
         assertEquals(13, frog.getAge()); // L'âge devrait augmenter après avoir mangé la mouche
         assertTrue(fly.isDead()); // La mouche devrait être morte après avoir été mangée
@@ -67,7 +68,7 @@ class FrogTest {
     // Test pour la méthode toString
     @Test
     void testToString() {
-        String expected = "My name is Peepaw and I am a rare Froglet ! I am 12 months old and my tongue has a speed of 6.I am in position (0, 0) !";
+        String expected = "My name is Peepaw and I'm a rare frog. I'm 12 months old and my tongue has a speed of 6.0.I am in position (0, 0) !";
         assertEquals(expected, frog.toString());
     }
 
